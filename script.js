@@ -1,74 +1,85 @@
-let computerScore = 0;
+let playerSelection;
 let humanScore = 0;
+let computerScore = 0;
+let gameCount = 0;
 
-function computerPlay() {
-    switch (Math.floor(Math.random() * (3 - 1 + 1)) + 1) {
-        case 1:
-            return "rock";
-        case 2:
-            return "paper";
-        case 3:
-            return "scissors";
-    }
-};    
-
-function humanPlay() {
-    return prompt("Choose your weapon!").toLowerCase();
+const onClick = (event) => {
+  if (event.target.className === 'playerChoice') {
+    playerSelection = (event.target.id);
+    removeAllChildNodes(container);
+    playRound(playerSelection, computerSelection());
+    checkWinner(computerScore, humanScore);
+  }
 }
+
+window.addEventListener('click', onClick);
+
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+  parent.removeChild(parent.firstChild);
+  }
+};
+
+function checkWinner(computerScore,humanScore) {
+  const winner = document.createElement('p');  
+  if (computerScore == 5) {
+    winner.textContent = "Computer wins the game!";
+    container.appendChild(winner);
+  }
+  else if (humanScore == 5) {
+    winner.textContent = "Computer wins the game!";
+    container.appendChild(winner);
+  }
+  return;
+};
+
+computerSelection = function () {
+  switch (Math.floor(Math.random() * (3 - 1 + 1)) + 1) {
+    case 1:
+      return "rock";
+    case 2:
+      return "paper";
+    case 3:
+      return "scissors";
+  }
+};
 
 function playRound(playerSelection, computerSelection) {
-    playerSelection = humanPlay();
-    computerSelection = computerPlay();
 
-    switch (playerSelection) {
-        case "rock":
-            if (computerSelection =="paper") {
-                computerScore ++;
-                return `You chose ${playerSelection} and the computer chose ${computerSelection}, so you lose!`
-            }
-            else if (computerSelection =="rock") {
-                return `You chose ${playerSelection} and the computer chose ${computerSelection} too, so it's a draw!`
-            }
-            else {
-                humanScore ++;
-                return `You chose ${playerSelection} and the computer chose ${computerSelection}, so you win!`
-            }
-            case "paper":
-                if (computerSelection =="scissors") {
-                    computerScore ++;
-                    return `You chose ${playerSelection} and the computer chose ${computerSelection}, so you lose!`
-                }
-                else if (computerSelection =="paper") {
-                    return `You chose ${playerSelection} and the computer chose ${computerSelection} too, so it's a draw!`
-                }
-                else {
-                    humanScore ++;
-                    return `You chose ${playerSelection} and the computer chose ${computerSelection}, so you win!`
-                }
-                case "scissors":
-                    if (computerSelection =="rock") {
-                        computerScore ++;
-                        return `You chose ${playerSelection} and the computer chose ${computerSelection}, so you lose!`
-                    }
-                    else if (computerSelection =="scissors") {
-                        return `You chose ${playerSelection} and the computer chose ${computerSelection} too, so it's a draw!`
-                    }
-                    else {
-                        humanScore ++;
-                        return `You chose ${playerSelection} and the computer chose ${computerSelection}, so you win!`
-                    }
-            default:
-                return "You didn't select a valid option, please try again.";
-    }
-}
+  const playerChoice = document.createElement('p');
+  playerChoice.textContent = `You chose ${playerSelection}`;
+  container.appendChild(playerChoice);
 
-function game() {
-    humanScore = 0;
-    computerScore = 0;
+  const computerChoice = document.createElement('p');
+  computerChoice.textContent = `The computer chose ${computerSelection}`;
+  container.appendChild(computerChoice);
 
-    for (let i= 0; i < 5; i++) {
-        console.log(playRound());
-        console.log(`Human Score = ${humanScore}`)
-        console.log(`Computer Score = ${computerScore}`)
-    }
-}
+  const result = document.createElement('p');
+  result.classList.add = "result";
+
+  if ((playerSelection == "rock" && computerSelection == "scissors") ||
+    (playerSelection == "paper" && computerSelection == "rock") ||
+    (playerSelection == "scissors" && computerSelection == "paper")) {
+    humanScore++;
+    result.textContent = "You win! " + `Player score = ${humanScore}, Computer score = ${computerScore}`;
+    container.appendChild(result);
+    gameCount ++;
+    console.log(gameCount);
+  }
+  else if ((playerSelection == "rock" && computerSelection == "paper") ||
+    (playerSelection == "paper" && computerSelection == "scissors") ||
+    (playerSelection == "scissors" && computerSelection == "rock")) {
+    computerScore ++;
+    result.textContent = "You lose! " + `Player score = ${humanScore}, Computer score = ${computerScore}`;
+    container.appendChild(result);
+    gameCount ++;
+    console.log(gameCount);
+  }
+  else {result.textContent = "It's a draw! " + `Player scscore = ${humanScore}, Computer score = ${computerScore}`;
+  container.appendChild(result);
+  gameCount ++;
+  console.log(gameCount);
+  };
+};
+
+const container = document.querySelector('#container');
